@@ -22,5 +22,16 @@ export const describeSnapshotsRequestParams = (token) => ({
   NextToken: token,
 });
 
+export const deregisterImageRequestParams = (imageId) => ({
+  ImageId: imageId,
+  DryRun: true,
+});
+
+export const deleteSnapshotRequestParams = (snapshotId) => ({
+  // DeleteSnapshotRequest
+  SnapshotId: snapshotId,
+  DryRun: true,
+});
+
 export const DELETE_AMI_LIST_FILE = "delete_ami_list.csv";
 export const DELETE_SNAPSHOT_LIST_FILE = "delete_snapshot_list.csv";
