@@ -8,3 +8,6 @@ export const describeImagesRequestParams = (token) => ({
   MaxResults: 25,
   NextToken: token,
 });
+
+export const DELETE_AMI_LIST_FILE = "delete_ami_list.csv";
+export const DELETE_SNAPSHOT_LIST_FILE = "delete_snapshot_list.csv";

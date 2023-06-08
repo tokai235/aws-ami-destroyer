@@ -1,2 +1,4 @@
 /.DS_Store
 /node_modules
+delete_ami_list.csv
+delete_snapshot_list.csv
