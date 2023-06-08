@@ -24,6 +24,7 @@ while (true) {
     (image) => dayjs(image.CreationDate) < DELETE_TARGET_DATE
   ).map((image) => ({
     createdAt: image.CreationDate,
+    id: image.ImageId,
     imageName: image.Name,
   }));
 
