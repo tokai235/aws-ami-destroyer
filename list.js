@@ -13,31 +13,23 @@ import { stringify } from "csv-stringify/sync";
 import dayjs from "dayjs";
 
 let token = null;
-let i = 0;
 let deleteAmis = [];
 while (true) {
   const command = new DescribeImagesCommand(describeImagesRequestParams(token));
 
   const response = await ec2Client.send(command);
-  // console.log({ response });
-  console.log(response.Images[0]);
+  console.log(response.Images[0].Name);
 
   // 削除対象のものを 名前と作成日 のみ抽出
   const responseImages = response.Images.filter(
     (image) => dayjs(image.CreationDate) < DELETE_TARGET_DATE
   ).map((image) => ({
-    imageName: image.Name,
     createdAt: image.CreationDate,
+    imageName: image.Name,
   }));
 
   deleteAmis.push(...responseImages);
   token = response.NextToken;
-  i++;
-
-  if (i==10) {
-    // NextToken が null なら抜ける
-    break;
-  }
 
   if (response.NextToken == null) {
     // NextToken が null なら抜ける
