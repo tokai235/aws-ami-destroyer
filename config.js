@@ -15,5 +15,12 @@ export const describeImagesRequestParams = (token) => ({
   NextToken: token,
 });
 
+export const describeSnapshotsRequestParams = (token) => ({
+  OwnerIds: [process.env.ACCOUNT_ID], // 対象のアカウントID
+  DryRun: false,
+  MaxResults: 25, // 25件ずつ取得
+  NextToken: token,
+});
+
 export const DELETE_AMI_LIST_FILE = "delete_ami_list.csv";
 export const DELETE_SNAPSHOT_LIST_FILE = "delete_snapshot_list.csv";
