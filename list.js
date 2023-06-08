@@ -1,25 +1,52 @@
 import {
   DescribeImagesCommand
 } from "@aws-sdk/client-ec2";
-import { ec2Client, describeImagesRequestParams, DELETE_AMI_LIST_FILE, DELETE_SNAPSHOT_LIST_FILE } from "./config.js";
+import {
+  ec2Client,
+  describeImagesRequestParams,
+  DELETE_AMI_LIST_FILE,
+  DELETE_SNAPSHOT_LIST_FILE,
+  DELETE_TARGET_DATE,
+} from "./config.js";
 import fs from "fs";
 import { stringify } from "csv-stringify/sync";
+import dayjs from "dayjs";
 
 let token = null;
-const command = new DescribeImagesCommand(
-  describeImagesRequestParams(token)
-);
+let i = 0;
+let deleteAmis = [];
+while (true) {
+  const command = new DescribeImagesCommand(describeImagesRequestParams(token));
 
-const response = await ec2Client.send(command);
-console.log({ response });
+  const response = await ec2Client.send(command);
+  // console.log({ response });
+  console.log(response.Images[0]);
 
-// 名前と作成日を抽出
-const deleteAmis = response.Images.map(
-  (image) => ({
+  // 削除対象のものを 名前と作成日 のみ抽出
+  const responseImages = response.Images.filter(
+    (image) => dayjs(image.CreationDate) < DELETE_TARGET_DATE
+  ).map((image) => ({
     imageName: image.Name,
     createdAt: image.CreationDate,
-  })
-);
+  }));
+
+  deleteAmis.push(...responseImages);
+  token = response.NextToken;
+  i++;
+
+  if (i==10) {
+    // NextToken が null なら抜ける
+    break;
+  }
+
+  if (response.NextToken == null) {
+    // NextToken が null なら抜ける
+    break;
+  }
+}
+
+// 日付順にソート
+deleteAmis = deleteAmis.sort((a, b) => dayjs(a.createdAt) - dayjs(b.createdAt));
 
 // ファイルに書き出し
 fs.writeFileSync(
@@ -31,5 +58,3 @@ fs.writeFileSync(
     }
   )
 );
-
-token = response.NextToken;
