@@ -20,7 +20,7 @@ const deleteAmis = parse(amiData, {
 });
 
 let results = await Promise.allSettled(
-  [deleteAmis[0]].map((ami) => {
+  deleteAmis.map((ami) => {
     console.log(`Deleting AMI ${ami.id}...`);
     const imageCommand = new DeregisterImageCommand(
       deregisterImageRequestParams(ami.id)
@@ -41,7 +41,7 @@ const deleteSnapshots = parse(snapshotData, {
 });
 
 results = await Promise.allSettled(
-  [deleteSnapshots[0]].map((snapshot) => {
+  deleteSnapshots.map((snapshot) => {
     console.log(`Deleting Snapshot ${snapshot.id}...`);
     const snapshotCommand = new DeleteSnapshotCommand(
       deleteSnapshotRequestParams(snapshot.id)
