@@ -17,7 +17,7 @@ export default async function () {
     columns: true,
   });
 
-  results = await Promise.allSettled(
+  const results = await Promise.allSettled(
     deleteSnapshots.map((snapshot) => {
       console.log(`Deleting Snapshot ${snapshot.id}...`);
       const snapshotCommand = new DeleteSnapshotCommand(
