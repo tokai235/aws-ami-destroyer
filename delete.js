@@ -19,17 +19,18 @@ const deleteAmis = parse(amiData, {
   columns: true,
 });
 
-(async () => {
-  for await (ami of [deleteAmis[0]]) {
+let results = await Promise.allSettled(
+  [deleteAmis[0]].map((ami) => {
     console.log(`Deleting AMI ${ami.id}...`);
     const imageCommand = new DeregisterImageCommand(
       deregisterImageRequestParams(ami.id)
     );
 
     // result は空データしか返ってこない
-    await ec2Client.send(imageCommand);
-  }
-})();
+    ec2Client.send(imageCommand);
+  })
+)
+console.log(results);
 
 
 // EBS Snapshot
@@ -39,15 +40,16 @@ const deleteSnapshots = parse(snapshotData, {
   columns: true,
 });
 
-(async () => {
-  for await (snapshot of [deleteSnapshots[0]]) {
+results = await Promise.allSettled(
+  [deleteSnapshots[0]].map((snapshot) => {
     console.log(`Deleting Snapshot ${snapshot.id}...`);
     const snapshotCommand = new DeleteSnapshotCommand(
       deleteSnapshotRequestParams(snapshot.id)
     );
 
     // result は空データしか返ってこない
-    await ec2Client.send(snapshotCommand);
-  }
-})();
+    ec2Client.send(snapshotCommand);
+  })
+)
+console.log(results);
 
