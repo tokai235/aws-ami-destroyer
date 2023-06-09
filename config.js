@@ -10,16 +10,16 @@ export const ec2Client = new EC2Client({region: "ap-northeast-1"});
 
 export const describeImagesRequestParams = (token) => ({
   Owners: [process.env.ACCOUNT_ID], // 対象のアカウントID
-  DryRun: false,
   MaxResults: 25, // 25件ずつ取得
   NextToken: token,
+  DryRun: false,
 });
 
 export const describeSnapshotsRequestParams = (token) => ({
   OwnerIds: [process.env.ACCOUNT_ID], // 対象のアカウントID
-  DryRun: false,
   MaxResults: 25, // 25件ずつ取得
   NextToken: token,
+  DryRun: false,
 });
 
 export const deregisterImageRequestParams = (imageId) => ({
