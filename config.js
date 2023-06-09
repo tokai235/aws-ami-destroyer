@@ -28,7 +28,6 @@ export const deregisterImageRequestParams = (imageId) => ({
 });
 
 export const deleteSnapshotRequestParams = (snapshotId) => ({
-  // DeleteSnapshotRequest
   SnapshotId: snapshotId,
   DryRun: true,
 });
