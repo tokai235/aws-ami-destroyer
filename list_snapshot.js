@@ -26,7 +26,7 @@ export default async function () {
     const responseImages = response.Snapshots.filter(
       (snapshot) => dayjs(snapshot.StartTime) < DELETE_TARGET_DATE
     ).map((snapshot) => ({
-      createdAt: snapshot.StartTime,
+      createdAt: dayjs(snapshot.StartTime).format(), // StartTime は unix timestamp なので読みやすくする
       id: snapshot.SnapshotId,
       description: snapshot.Description,
     }));
